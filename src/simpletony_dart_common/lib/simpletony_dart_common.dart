@@ -1,1 +1,3 @@
-import 'sdk/azblob/image_uploader.dart';
+library simpletony_dart_common;
+
+export 'sdk/azblob/image_uploader.dart';
