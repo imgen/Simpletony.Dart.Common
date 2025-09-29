@@ -12,7 +12,8 @@ class AzureBlobImageUploader {
   static const List<String> supportedImageTypes = [
     'image/jpeg',
     'image/png',
-    'image/webp'
+    'image/webp',
+    'image/gif'
   ];
   static final pathContext = Context(style: Style.posix);
 
