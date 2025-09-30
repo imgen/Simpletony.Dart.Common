@@ -21,9 +21,13 @@ class AzureBlobImageUploader {
   final String _baseUrl;
   AzureBlobImageUploader(this._storage, this._baseUrl);
 
+  bool isImageOversize(File imageFile) {
+    return imageFile.lengthSync() > maxImageSizeInBytes;
+  }
+
   Future<String> uploadImage(File imageFile, String folder,
       {String? extraFolder = null}) async {
-    assert(imageFile.lengthSync() <= maxImageSizeInBytes,
+    assert(!isImageOversize(imageFile),
         "Image size exceeds the maximum limit of $maxImageSizeInBytes bytes.");
     final fileName = pathContext.basename(imageFile.path);
     final mimeType = lookupMimeType(fileName) ?? 'application/octet-stream';
