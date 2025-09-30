@@ -25,14 +25,19 @@ class AzureBlobImageUploader {
     return imageFile.lengthSync() > maxImageSizeInBytes;
   }
 
+  bool isSupportedImageType(File imageFile) {
+    final fileName = pathContext.basename(imageFile.path);
+    final mimeType = lookupMimeType(fileName);
+    return mimeType != null && supportedImageTypes.contains(mimeType);
+  }
+
   Future<String> uploadImage(File imageFile, String folder,
       {String? extraFolder = null}) async {
     assert(!isImageOversize(imageFile),
         "Image size exceeds the maximum limit of $maxImageSizeInBytes bytes.");
     final fileName = pathContext.basename(imageFile.path);
-    final mimeType = lookupMimeType(fileName) ?? 'application/octet-stream';
-    assert(supportedImageTypes.contains(mimeType),
-        "Unsupported image type: $mimeType. Supported types are: $supportedImageTypes");
+    assert(isSupportedImageType(imageFile),
+        "Unsupported image type. Supported types are: $supportedImageTypes");
     final bytes = await imageFile.readAsBytes();
     final relativePath =
         pathContext.join(imageContainerName, folder, extraFolder, fileName);
