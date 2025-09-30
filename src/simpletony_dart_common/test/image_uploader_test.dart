@@ -61,5 +61,27 @@ void main() {
 
       await uploader.deleteImage(imageUrl);
     });
+
+    test('test isImageOversize', () async {
+      final pathContext = AzureBlobImageUploader.pathContext;
+      const imageFileName = "beauty.jpg";
+      final imageFilePath =
+          pathContext.join("test", "resources", imageFileName);
+      final imageFile = File(imageFilePath);
+
+      expect(AzureBlobImageUploader.isImageOversize(imageFile), false,
+          reason: 'Small image should not be judged as oversize');
+    });
+
+    test('test isSupportedImageType', () async {
+      final pathContext = AzureBlobImageUploader.pathContext;
+      const imageFileName = "beauty.jpg";
+      final imageFilePath =
+          pathContext.join("test", "resources", imageFileName);
+      final imageFile = File(imageFilePath);
+
+      expect(AzureBlobImageUploader.isSupportedImageType(imageFile), true,
+          reason: 'Supported image type should be recognized');
+    });
   });
 }

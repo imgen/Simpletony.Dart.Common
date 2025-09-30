@@ -36,6 +36,7 @@ class AzureBlobImageUploader {
     assert(!isImageOversize(imageFile),
         "Image size exceeds the maximum limit of $maxImageSizeInBytes bytes.");
     final fileName = pathContext.basename(imageFile.path);
+    final mimeType = lookupMimeType(fileName);
     assert(isSupportedImageType(imageFile),
         "Unsupported image type. Supported types are: $supportedImageTypes");
     final bytes = await imageFile.readAsBytes();
