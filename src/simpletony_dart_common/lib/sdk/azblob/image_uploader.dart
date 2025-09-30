@@ -17,12 +17,9 @@ class AzureBlobImageUploader {
   ];
   static final pathContext = Context(style: Style.posix);
 
-  late AzureStorage _storage;
-  late String _baseUrl;
-  AzureBlobImageUploader(AzureStorage storage, String baseUrl) {
-    _storage = storage;
-    _baseUrl = baseUrl;
-  }
+  final AzureStorage _storage;
+  final String _baseUrl;
+  AzureBlobImageUploader(this._storage, this._baseUrl);
 
   Future<String> uploadImage(File imageFile, String folder,
       {String? extraFolder = null}) async {
@@ -49,5 +46,15 @@ class AzureBlobImageUploader {
 
   Future<String> uploadPostImage(File imageFile, String postId) async {
     return await uploadImage(imageFile, postImageFolder, extraFolder: postId);
+  }
+
+  Future<void> deleteImage(String imageUrl) async {
+    if (!imageUrl.startsWith(_baseUrl)) {
+      throw ArgumentError(
+          "Image URL does not belong to the configured base URL.");
+    }
+
+    final relativePath = imageUrl.substring(_baseUrl.length);
+    await _storage.deleteBlob(relativePath);
   }
 }
