@@ -21,11 +21,11 @@ class AzureBlobImageUploader {
   final String _baseUrl;
   AzureBlobImageUploader(this._storage, this._baseUrl);
 
-  bool isImageOversize(File imageFile) {
+  static bool isImageOversize(File imageFile) {
     return imageFile.lengthSync() > maxImageSizeInBytes;
   }
 
-  bool isSupportedImageType(File imageFile) {
+  static bool isSupportedImageType(File imageFile) {
     final fileName = pathContext.basename(imageFile.path);
     final mimeType = lookupMimeType(fileName);
     return mimeType != null && supportedImageTypes.contains(mimeType);
