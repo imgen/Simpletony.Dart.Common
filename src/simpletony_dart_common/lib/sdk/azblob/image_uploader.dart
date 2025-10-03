@@ -9,11 +9,16 @@ class AzureBlobImageUploader {
   static const String profileImageFolder = "user_profiles";
   static const String postImageFolder = "post_images";
   static const int maxImageSizeInBytes = 512 * 1024; // 512 KB
+
+  static const String jpegMimeType = "image/jpeg";
+  static const String pngMimeType = "image/png";
+  static const String webpMimeType = "image/webp";
+  static const String gifMimeType = "image/gif";
   static const List<String> supportedImageTypes = [
-    'image/jpeg',
-    'image/png',
-    'image/webp',
-    'image/gif'
+    jpegMimeType,
+    pngMimeType,
+    webpMimeType,
+    gifMimeType
   ];
   static final pathContext = Context(style: Style.posix);
 
