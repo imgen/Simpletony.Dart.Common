@@ -5,15 +5,16 @@ import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 
 class AzureBlobImageUploader {
-  static const String imageContainerName = "images";
-  static const String profileImageFolder = "user_profiles";
-  static const String postImageFolder = "post_images";
-  static const int maxImageSizeInBytes = 512 * 1024; // 512 KB
+  static const String imageContainerName = 'images';
+  static const String profileImageFolder = 'user_profiles';
+  static const String postImageFolder = 'post_images';
+  static const int maxImageSizeInKb = 512;
+  static const int maxImageSizeInBytes = maxImageSizeInKb * 1024; // 512 KB
 
-  static const String jpegMimeType = "image/jpeg";
-  static const String pngMimeType = "image/png";
-  static const String webpMimeType = "image/webp";
-  static const String gifMimeType = "image/gif";
+  static const String jpegMimeType = 'image/jpeg';
+  static const String pngMimeType = 'image/png';
+  static const String webpMimeType = 'image/webp';
+  static const String gifMimeType = 'image/gif';
   static const List<String> supportedImageTypes = [
     jpegMimeType,
     pngMimeType,
@@ -39,11 +40,11 @@ class AzureBlobImageUploader {
   Future<String> uploadImage(File imageFile, String folder,
       {String? extraFolder = null}) async {
     assert(!isImageOversize(imageFile),
-        "Image size exceeds the maximum limit of $maxImageSizeInBytes bytes.");
+        'Image size exceeds the maximum limit of $maxImageSizeInBytes bytes.');
     final fileName = pathContext.basename(imageFile.path);
     final mimeType = lookupMimeType(fileName);
     assert(isSupportedImageType(imageFile),
-        "Unsupported image type. Supported types are: $supportedImageTypes");
+        'Unsupported image type. Supported types are: $supportedImageTypes');
     final bytes = await imageFile.readAsBytes();
     final relativePath =
         pathContext.join(imageContainerName, folder, extraFolder, fileName);
@@ -66,7 +67,7 @@ class AzureBlobImageUploader {
   Future<void> deleteImage(String imageUrl) async {
     if (!imageUrl.startsWith(_baseUrl)) {
       throw ArgumentError(
-          "Image URL does not belong to the configured base URL.");
+          'Image URL does not belong to the configured base URL.');
     }
 
     final relativePath = imageUrl.substring(_baseUrl.length);
