@@ -41,13 +41,16 @@ class AzureBlobImageUploader {
       {String? extraFolder = null}) async {
     assert(!isImageOversize(imageFile),
         'Image size exceeds the maximum limit of $maxImageSizeInBytes bytes.');
+    // Just in case we are running in Windows
+    final filePath = imageFile.path.replaceAll('\\', '/');
     final fileName = pathContext.basename(imageFile.path);
     final mimeType = lookupMimeType(fileName);
     assert(isSupportedImageType(imageFile),
         'Unsupported image type. Supported types are: $supportedImageTypes');
     final bytes = await imageFile.readAsBytes();
-    final relativePath =
-        pathContext.join(imageContainerName, folder, extraFolder, fileName);
+    final relativePath = extraFolder != null && extraFolder.isNotEmpty
+        ? pathContext.join(imageContainerName, folder, extraFolder, fileName)
+        : pathContext.join(imageContainerName, folder, fileName);
     // Azure Blob path should start with '/'
     final blobPath = pathContext.join('/', relativePath);
     await _storage.putBlob(blobPath, bodyBytes: bytes, contentType: mimeType);
